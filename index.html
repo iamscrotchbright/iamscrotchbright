@@ -14,9 +14,11 @@
       --text-color: #1a1c20;
       --link-color: #4a76ee;
       --background-color: #ffffff;
-      --button-color: #4a76ee; /* สีปุ่มในธีมสว่าง */
-      --button-gradient: linear-gradient(45deg, #8e2de2, #4a00e0); /* gradient violet */
-      --bright-text-gradient: linear-gradient(45deg, #8e2de2, #4a00e0); /* gradient สำหรับคำว่า Bright */
+      --button-color: #4a76ee;
+      --button-gradient: linear-gradient(45deg, #8e2de2, #4a00e0);
+      --bright-text-gradient: linear-gradient(45deg, #8e2de2, #4a00e0);
+      --icon-color-light: #000000;
+      --icon-color-dark: #ffffff;
     }
 
     * {
@@ -73,6 +75,7 @@
         opacity: 1;
       }
     }
+
     .hero-section .text {
       flex: 1;
       min-width: 300px;
@@ -114,11 +117,65 @@
     }
 
     .hero-section .text h2 .rainbow-text {
-      background: var(--bright-text-gradient); /* ใช้ gradient violet */
+      background: var(--bright-text-gradient);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       font-weight: bold;
+    }
+
+    /* ปรับขนาดและรูปแบบของปุ่มเปลี่ยนธีม */
+    .theme-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--button-color);
+      padding: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s ease;
+      width: 60px;
+      height: 60px;
+    }
+
+    .theme-toggle i {
+      font-size: 28px;
+      transition: color 0.3s ease;
+      color: #fff;
+    }
+
+    /* ปรับการแสดงผลในโหมดมืด */
+    body[data-theme="dark"] {
+      background-color: #000000;
+      color: #ffffff;
+    }
+
+    body[data-theme="dark"] .theme-toggle {
+      background-color: #ffffff; /* พื้นหลังปุ่มเป็นสีขาว */
+    }
+
+    body[data-theme="dark"] .theme-toggle i {
+      color: #000000; /* ไอคอนสีดำ */
+    }
+
+    body[data-theme="dark"] .hero-section .text {
+      color: #ffffff;
+    }
+
+    body[data-theme="dark"] .hero-section .text a {
+      color: #ffffff;
+    }
+
+    body[data-theme="dark"] .hero-section .text .links a {
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+
+    body[data-theme="dark"] .hero-section .text .links a:hover {
+      background-color: #000000;
     }
 
     @media (max-width: 1024px) {
@@ -156,12 +213,13 @@
       .hero-section .text .links a {
         margin-bottom: 10px;
       }
+
+      .fa-solid .fa-moon {
+        color: #ffffff;
+      }
     }
 
     @media (max-width: 768px) {
-
-      
-   
       .hero-section {
         padding: 15px;
         margin-top: 2rem;
@@ -189,9 +247,11 @@
       .hero-section .text .links {
         text-align: center;
       }
-    }
 
-    
+      .moon {
+        color: #ffffff;
+      }
+    }
   </style>
 </head>
 
@@ -213,33 +273,42 @@
       </div>
       <div class="headshot"><img src="https://media-hosting.imagekit.io//c16aca0fff6f49fe/IMG_0593%20(1).JPG?Expires=1832149918&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=2Np4VPTIve5jWiVZ-W4XQXGFTQXlYuEeQc9VTt~KjJ~ffjWYZSHQlweKu9JkQn~kJEmvA4rIlbpcBv2QGrSZLrr2rLV3KFb6v5FL1C7tX7sgHNN6ut1m2j6RD9VcJfUzkNJMkX4js8xrJ4HPHhj805PrT21nBZiALMWAI4eibGGAbZgSxGSZrw3jlZ-roD2QQv7U3IzjesSZUpoo1fYiC7v-0PxNtZlQRfVv-1rwPe2qRlI9bwOGBNKJUgqikOhoIdx8UEBAMxZJdIlCU8Zkk5WWcrATWSQX7kFNM3omFJ46HuEYdA0Fbgl3dmNDvPEyl7FjsXPKjdg~A96kf9oOcQ__" alt="Bright's headshot"></div>
     </section>
-
   </main>
- 
+
+  <!-- ปุ่มเปลี่ยนธีม -->
+  <div class="theme-toggle" style="background: #000;" onclick="changeTheme()">
+    <i class="fa-solid fa-moon moon" style="color: #fff;"></i>
   </div>
+
   <script>
     function changeTheme() {
       const root = document.documentElement;
       const currentBackgroundColor = getComputedStyle(root).getPropertyValue('--background-color').trim();
+      const icon = document.querySelector('.theme-toggle i');
+      const themeToggle = document.querySelector('.theme-toggle');
 
       if (currentBackgroundColor === '#ffffff') {
         root.style.setProperty('--background-color', '#000000');
         root.style.setProperty('--text-color', '#ffffff');
         root.style.setProperty('--link-color', '#ffffff');
-        root.style.setProperty('--button-color', '#ffffff'); /* ปุ่มสีขาวในธีมมืด */
-        root.style.setProperty('--button-hover-color', '#4a76ee');
+        root.style.setProperty('--button-color', '#ffffff');
         root.style.setProperty('--bright-text-gradient', 'linear-gradient(45deg, #8e2de2, #4a00e0)');
+        themeToggle.style.backgroundColor = '#ffffff'; /* พื้นหลังปุ่มเป็นสีขาว */
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        icon.style.color = '#000000'; /* ไอคอนพระจันทร์เป็นสีดำ */
       } else {
         root.style.setProperty('--background-color', '#ffffff');
         root.style.setProperty('--text-color', '#1a1c20');
         root.style.setProperty('--link-color', '#4a76ee');
-        root.style.setProperty('--button-color', '#4a76ee'); /* ปุ่มสีฟ้าในธีมสว่าง */
-        root.style.setProperty('--button-hover-color', '#1a1c20');
+        root.style.setProperty('--button-color', '#4a76ee');
         root.style.setProperty('--bright-text-gradient', 'linear-gradient(45deg, #8e2de2, #4a00e0)');
+        themeToggle.style.backgroundColor = '#4a76ee'; /* ปุ่มสีฟ้า */
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        icon.style.color = '#fff'; /* ไอคอนเป็นสีขาว */
       }
     }
-
-    setInterval(changeTheme, 15000);
   </script>
 </body>
 </html>
